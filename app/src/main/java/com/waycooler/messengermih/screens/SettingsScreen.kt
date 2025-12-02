@@ -4,15 +4,18 @@ import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.waycooler.messengermih.viewmodels.SettingsViewModel
 
 @Composable
 fun SettingsScreen(
-    darkTheme: Boolean,
-    onThemeChange: (Boolean) -> Unit
+    viewModel: SettingsViewModel = viewModel()
 ) {
     val tag = "SettingsScreen"
+    val darkTheme = viewModel.darkTheme.observeAsState(false)
 
     androidx.compose.runtime.DisposableEffect(Unit) {
         Log.d(tag, "Экран настроек создан")
@@ -33,8 +36,8 @@ fun SettingsScreen(
             ) {
                 Text("Тёмная тема")
                 Switch(
-                    checked = darkTheme,
-                    onCheckedChange = { onThemeChange(it) }
+                    checked = darkTheme.value,
+                    onCheckedChange = { viewModel.setDarkTheme(it) }
                 )
             }
         }

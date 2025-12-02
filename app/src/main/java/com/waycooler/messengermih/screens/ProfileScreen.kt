@@ -1,101 +1,85 @@
 package com.waycooler.messengermih.screens
 
 import android.util.Log
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.waycooler.messengermih.R
-import com.waycooler.messengermih.data.User
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.waycooler.messengermih.viewmodels.ProfileViewModel
 
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(profileViewModel: ProfileViewModel = viewModel()) {
     val tag = "ProfileScreen"
-    val user = User(
-        id = 1,
-        name = "Вайкулер",
-        email = "waycooler@mail.ru",
-        bio = "Засчитайте лабу пж :)",
-        avatarUrl = ""
-    )
 
-    androidx.compose.runtime.DisposableEffect(Unit) {
+    val name = profileViewModel.name.observeAsState("Имя по умолчанию")
+    val status = profileViewModel.status.observeAsState("Статус по умолчанию")
+
+    DisposableEffect(Unit) {
         Log.d(tag, "Экран Профиля создан")
-        onDispose {
-            Log.d(tag, "Экран Профиля уничтожен")
-        }
+        onDispose { Log.d(tag, "Экран Профиля уничтожен") }
     }
 
-    ProfileContent(user)
+    ProfileContent(
+        name = name.value,
+        status = status.value,
+        onNameChange = { profileViewModel.updateName(it) },
+        onStatusChange = { profileViewModel.updateStatus(it) },
+        onSaveClick = {
+            Log.d(tag, "Сохраняем: имя=${name.value}, статус=${status.value}")
+        }
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileContent(user: User) {
-    Scaffold(
-        topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(
-                        "Профиль",
-                        style = MaterialTheme.typography.headlineSmall
-                    )
-                }
-            )
-        }
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            // 🖼️ Локальная аватарка
-            Image(
-                painter = painterResource(id = R.drawable.my_avatar),
-                contentDescription = "Аватар пользователя",
-                modifier = Modifier
-                    .size(120.dp)
-                    .clip(CircleShape),
-                contentScale = androidx.compose.ui.layout.ContentScale.Crop
+fun ProfileContent(
+    name: String,
+    status: String,
+    onNameChange: (String) -> Unit,
+    onStatusChange: (String) -> Unit,
+    onSaveClick: () -> Unit
+) {
+    Surface(modifier = Modifier
+        .fillMaxSize()
+        .padding(16.dp)
+    ) {
+        Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            Text("Профиль", style = MaterialTheme.typography.headlineLarge)
+
+            OutlinedTextField(
+                value = name,
+                onValueChange = onNameChange,
+                label = { Text("Имя") },
+                modifier = Modifier.fillMaxWidth()
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                text = user.name,
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold
+            OutlinedTextField(
+                value = status,
+                onValueChange = onStatusChange,
+                label = { Text("Статус") },
+                modifier = Modifier.fillMaxWidth()
             )
 
-            Text(
-                text = user.email,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Text(
-                text = user.bio,
-                style = MaterialTheme.typography.bodyLarge,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(horizontal = 32.dp)
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Button(onClick = { /* TODO: переход на экран редактирования */ }) {
-                Text("Редактировать профиль")
+            Button(
+                onClick = onSaveClick,
+                modifier = Modifier.align(alignment = androidx.compose.ui.Alignment.Start)
+            ) {
+                Text("Сохранить")
             }
         }
     }

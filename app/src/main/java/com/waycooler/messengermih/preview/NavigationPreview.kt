@@ -14,6 +14,7 @@ import com.waycooler.messengermih.ui.theme.MessengerMihTheme
 @Preview(showBackground = true)
 @Composable
 fun NavigationGraphPreview() {
+
     MessengerMihTheme {
         val navController = rememberNavController()
         NavHost(
@@ -22,9 +23,7 @@ fun NavigationGraphPreview() {
         ) {
             composable(Screen.Feed.route) { FeedScreen() }
             composable(Screen.Profile.route) { ProfileScreen() }
-            composable(Screen.Settings.route) {
-                SettingsScreen(darkTheme = false, onThemeChange = {})
-            }
+            composable(Screen.Settings.route) { SettingsScreen() }
         }
     }
 }
