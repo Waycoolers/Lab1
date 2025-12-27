@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    kotlin("kapt")
 }
 
 android {
@@ -64,4 +65,11 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.coil.compose)
     implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation ("com.squareup.retrofit2:retrofit:3.0.0")
+    implementation ("com.squareup.retrofit2:converter-gson:3.0.0")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
+    kapt("androidx.room:room-compiler:2.8.4")
+    implementation ("androidx.room:room-runtime:2.8.4")
+    implementation ("androidx.room:room-ktx:2.8.4")
+    implementation ("androidx.recyclerview:recyclerview:1.4.0")
 }
