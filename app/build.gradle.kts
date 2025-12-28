@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.androidx.compose.material3.adaptive.navigation.suite)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.compose.runtime.livedata)
+    implementation(libs.androidx.cardview)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -72,4 +73,9 @@ dependencies {
     implementation ("androidx.room:room-runtime:2.8.4")
     implementation ("androidx.room:room-ktx:2.8.4")
     implementation ("androidx.recyclerview:recyclerview:1.4.0")
+    implementation("androidx.fragment:fragment-ktx:1.8.9")
+    implementation("androidx.compose.material:material-icons-extended")
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.10.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
 }
